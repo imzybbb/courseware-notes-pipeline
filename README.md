@@ -33,5 +33,9 @@
 - 老式 .ppt 逐页导出需要 **Windows + PowerPoint**（COM 自动化，脚本在 `scripts/`）；
 - 其余部分（笔记结构、公式渲染、重点标注、长图交付）与平台无关。
 
+## 许可证
+
+MIT License —— 随意使用、修改、分享，保留版权声明即可（详见 [LICENSE](LICENSE)）。
+
 ---
 *2026-10 · courseware-notes-pipeline · 个人打磨的 Agent Skill*
