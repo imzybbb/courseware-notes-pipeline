@@ -1,0 +1,2 @@
+# 依赖：Windows 下用 PowerPoint COM 导出每页图片与文字
+pywin32
