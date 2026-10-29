@@ -1,2 +1,5 @@
-# 依赖：Windows 下用 PowerPoint COM 导出每页图片与文字
+# .ppt/.pptx 逐页导出用（Windows + 已安装 PowerPoint）
 pywin32
+# 出图与验收
+Pillow
+PyMuPDF

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """导出课程 PPT：文字 dump + 每页 PNG。
 用法:
-  python export_slides.py "<课件目录>/第X章*.ppt" "<工作目录>/g01" ch01
+  python export_slides.py "<课件目录>/第二章-02*.ppt" "./work/g202" p202
 产物:
-  <workdir>/ppt_ch01.ppt          工作副本（不动原件）
-  <workdir>/slides_ch01/sNN.png   每页 PNG
-  <workdir>/dump_ch01.txt         每页文字 dump
-要点: DispatchEx 新实例；只读打开副本；Export 路径必须 normpath（forward slash 会失败）。
+  <workdir>/ppt_p202.ppt          工作副本（不动原件）
+  <workdir>/slides_p202/sNN.png   每页 PNG
+  <workdir>/dump_p202.txt         每页文字 dump
+要点: DispatchEx 新实例；Export 路径必须 normpath（forward slash 会失败）。
 """
 import sys, io, os, glob, shutil
 import win32com.client as wc, pythoncom
