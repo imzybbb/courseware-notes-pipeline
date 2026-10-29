@@ -47,6 +47,7 @@ python scripts/export_slides_hi.py "<课件路径glob>" "<工作目录>" <tag>  
 python scripts/check_md.py 笔记.md
 python scripts/check_math_cjk.py 笔记.md
 python scripts/check_katex.py 笔记.md            # 需 node + KaTeX 资产
+python scripts/check_restate.py 笔记.md          # 需 sympy（查总结框重述的系数）
 python pipeline/nb.py 笔记.md --outdir <图片版目录> --senddir <发送目录>
 ```
 
@@ -68,7 +69,8 @@ courseware-notes-pipeline/
     ├── export_slides_hi.py  .ppt/.pptx → 每页 PNG(2560×1920)，裁配图用
     ├── check_md.py          逮 `==` 混进数学块 / 跨行未闭合
     ├── check_math_cjk.py    逮 `$…$` 里裸中文（应写 \text{…}）
-    └── check_katex.py       用 node+KaTeX 真渲染一遍，逮解析错误
+    ├── check_katex.py       用 node+KaTeX 真渲染一遍，逮解析错误
+    └── check_restate.py     逮「记 X=…，则 Y=…」重述里的系数错（sympy 回代）
 ```
 
 ## 已知坑（都踩过，写进 SKILL.md 了）
@@ -77,6 +79,7 @@ courseware-notes-pipeline/
 - **`==…==` 不能写进 `$…$` / `$$…$$` 内部**：数学提取会把标记吞掉，渲染成裸露的 `==`。`check_md.py` 专逮这个。
 - **`$…$` 里的中文一律 `\text{…}`**，否则 KaTeX 直接失败（`check_math_cjk.py`）。
 - **16:9 课件别用 4:3 的尺寸导出**，形状会被拉变形；按 `pt/72*192` 算原生比例。
+- **「量纲核对」查不出系数**：曾写过 `记 A₀=2πrt，则 τ=T/(2A₀r)`，回代是 `T/(4πr²t)`，比推导小一半，而旁边的量纲核对照样打勾。系数错只能靠回代复核——`check_restate.py` 就是干这个的，实测在 58 处「记…则…」里只报 1 处、且是真错。
 - **PowerPoint 可能正开着课件**：只动副本，`Slide.Export` / `Open` 路径必须 `os.path.normpath` 成反斜杠。
 - 本机 KaTeX 静态文件不随仓库分发：`curl -sL https://registry.npmmirror.com/katex/-/katex-0.16.11.tgz` 解包 `package/dist` 到 `katex/`，或用 `KATEX_DIR` 环境变量指过去。
 

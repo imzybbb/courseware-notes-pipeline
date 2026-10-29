@@ -58,7 +58,8 @@ python pipeline/nb.py <笔记.md> --outdir <图片版目录> --senddir <发送�
 - 结构：标题 → 说明引用块 → 全节 → 每例题（**题目** ＋ **解**全过程）→ ★速记卡 →（必要时）勘误小注。
 - 公式 `$…$`；组合数 `$\mathrm{C}_n^k$`；`==高亮==` **单行、可含 `=`**；**绝不能写进数学块内部**（会被数学提取吞掉 → 渲染成裸露 `==`）。
 - **`$…$` 里的中文一律 `\text{…}`**（cases 分支的"其它/若/存在"等）。
-- 写完必跑预检：`scripts/check_md.py`、`scripts/check_math_cjk.py`、`scripts/check_katex.py`；禁裸 HTML。
+- 写完必跑预检：`scripts/check_md.py`、`scripts/check_math_cjk.py`、`scripts/check_katex.py`、`scripts/check_restate.py`；禁裸 HTML。
+- **`check_restate.py` 查的是系数，不是排版**：凡是写「记 X=…，则 Y=…」这种总结框重述，它会把定义回代进 Y 再用 sympy 化简，不为零就报。「量纲核对」只查单位、查不出系数——别拿打勾当复核过。
 
 ### 4. 出图
 
@@ -83,6 +84,7 @@ python pipeline/nb.py <笔记.md> --outdir <图片版目录> --senddir <发送�
 ## 失败恢复
 
 - md 里 `==` 混进数学、`$…$` 裸中文、`\,^\circ`：三条预检脚本各管一条，出图前跑完再渲，比出图后翻页返工便宜一个量级。
+- 公式两边不等（系数错）：跑 `check_restate.py`。它只覆盖「记…则…」这一种最易错的重述句式，其他位置的系数错仍需人工抽页复核。
 - PDF 生成了但没 PNG：多半是渲染环境缺 PyMuPDF（`import fitz` 失败），换一个装了的解释器重跑。
 - 宽表截断、页码对不上：先数张数再看图，别靠肉眼。
 - 长笔记自己分批写（3 节/批）；派子任务时写死「先落盘、禁探索性看图、每文件一步」；一轮翻车自己接管。
@@ -93,7 +95,8 @@ python pipeline/nb.py <笔记.md> --outdir <图片版目录> --senddir <发送�
 - `pipeline/nb_swiss.css` — 瑞士风主题（IKB 蓝 + 黄色荧光）
 - `pipeline/md2pdf_any.py` — 极简 md → HTML → Chrome 打印
 - `scripts/export_slides.py` / `export_slides_hi.py` — 课件导出（每页 PNG + 文字 dump）
-- `scripts/check_md.py` / `check_math_cjk.py` / `check_katex.py` — 出图前三道预检
+- `scripts/check_md.py` / `check_math_cjk.py` / `check_katex.py` — 出图前三道排版预检
+- `scripts/check_restate.py` — 出图前第四道：公式重述的系数复核（需要 sympy，`pip install sympy antlr4-python3-runtime==4.11`）
 
 ## 来源分级与红线
 
